@@ -1,3 +1,5 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNGY1MzlmYy1jYjQ0LTQ2ZGMtYmJkOS00YTIyMTA4ODExYWEiLCJpYXQiOjE3NDM2Mjg5MjIsImV4cCI6MTc0NDIzMzcyMn0.q-Y8m9Verl96pAyENFYgU0NR5v10GYJ2OQxoD3gISc4
+
 POST http://localhost:3333/users HTTP/1.1
 content-type: application/json
 
@@ -5,4 +7,22 @@ content-type: application/json
     "name": "Matheus",
     "email": "matheusbaron10@gmail.com",
     "password": "super-secret-password"
+}
+
+###
+POST http://localhost:3333/sessions/password HTTP/1.1
+content-type: application/json
+
+{
+    "email": "matheusbaron10@gmail.com",
+    "password": "super-secret-password"
+}
+
+###
+GET http://localhost:3333/users/profile HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "email": "matheusbaron10@gmail.com",
 }
