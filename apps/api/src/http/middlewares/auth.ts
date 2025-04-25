@@ -9,7 +9,7 @@ import { UnauthorizedError } from '../routes/_errors/unauthorizated-error'
 
 export const auth = fastifyPlugin(async (app: FastifyInstance) => {
   app.addHook('preHandler', async (request) => {
-    request.getCurretUserId = async () => {
+    request.getCurrentUserId = async () => {
       try {
         // sub = subject
         // O sub é o id do usuário que está autenticado
