@@ -22,17 +22,17 @@ export async function createOrganization(app: FastifyInstance) {
           body: z.object({
             name: z.string(),
             domain: z.string().nullish(),
-            shouldAttachUsersByDomain: z.boolean().optional(),
+            shouldAttachUsersByDomain: z.boolean().optional()
           }),
           response: {
             201: z.object({
-              organizationId: z.string().uuid(),
+              organizationId: z.string().uuid()
             }),
             400: z.object({
-              message: z.string(),
-            }),
-          },
-        },
+              message: z.string()
+            })
+          }
+        }
       },
       async (request, reply) => {
         const userId = await request.getCurrentUserId()
@@ -42,8 +42,8 @@ export async function createOrganization(app: FastifyInstance) {
         if (domain) {
           const organizationByDomain = await prisma.organization.findUnique({
             where: {
-              domain,
-            },
+              domain
+            }
           })
 
           if (organizationByDomain) {
@@ -63,14 +63,14 @@ export async function createOrganization(app: FastifyInstance) {
             members: {
               create: {
                 userId,
-                role: 'ADMIN',
-              },
-            },
-          },
+                role: 'ADMIN'
+              }
+            }
+          }
         })
 
         return reply.status(201).send({
-          organizationId: organization.id,
+          organizationId: organization.id
         })
       }
     )
