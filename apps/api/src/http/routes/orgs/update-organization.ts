@@ -14,7 +14,7 @@ export async function updateOrganization(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .post(
+    .put(
       '/organizations:slug',
       {
         schema: {
@@ -24,18 +24,18 @@ export async function updateOrganization(app: FastifyInstance) {
           body: z.object({
             name: z.string(),
             domain: z.string().nullish(),
-            shouldAttachUsersByDomain: z.boolean().optional()
+            shouldAttachUsersByDomain: z.boolean().optional(),
           }),
           params: z.object({
-            slug: z.string()
+            slug: z.string(),
           }),
           response: {
             204: z.null(),
             400: z.object({
-              message: z.string()
-            })
-          }
-        }
+              message: z.string(),
+            }),
+          },
+        },
       },
       async (request, reply) => {
         const { slug } = request.params
@@ -48,7 +48,7 @@ export async function updateOrganization(app: FastifyInstance) {
 
         const authOrganization = organizationSchema.parse({
           id: organization.id,
-          ownerId: organization.ownerId
+          ownerId: organization.ownerId,
         })
 
         const { cannot } = getUserPermissions(userId, membership.role)
@@ -64,9 +64,9 @@ export async function updateOrganization(app: FastifyInstance) {
             where: {
               domain,
               id: {
-                not: organization.id
-              }
-            }
+                not: organization.id,
+              },
+            },
           })
 
           if (organizationByDomain) {
@@ -78,13 +78,13 @@ export async function updateOrganization(app: FastifyInstance) {
 
         await prisma.organization.update({
           where: {
-            id: organization.id
+            id: organization.id,
           },
           data: {
             name,
             domain,
-            shouldAttachUsersByDomain
-          }
+            shouldAttachUsersByDomain,
+          },
         })
 
         return reply.status(204).send()

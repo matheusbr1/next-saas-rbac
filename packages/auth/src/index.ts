@@ -49,5 +49,11 @@ export function defineAbilityFor(user: User) {
     },
   })
 
+  // É necessário fazer o bind para que o this funcione corretamente
+  // o bind força o this a ser o ability
+  // ao ser desestruturado o this perde o contexto
+  ability.can = ability.can.bind(ability)
+  ability.cannot = ability.cannot.bind(ability)
+
   return ability
 }

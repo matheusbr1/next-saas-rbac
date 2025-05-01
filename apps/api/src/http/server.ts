@@ -10,7 +10,7 @@ import {
   jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
-  ZodTypeProvider
+  ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 
 import { errorHandler } from './error-handler'
@@ -24,6 +24,8 @@ import { createOrganization } from './routes/orgs/create-organization'
 import { getMembership } from './routes/orgs/get-membership'
 import { getOrganization } from './routes/orgs/get-organization'
 import { getOrganizations } from './routes/orgs/get-organizations'
+import { shutdownOrganization } from './routes/orgs/shutdown-organization'
+import { updateOrganization } from './routes/orgs/update-organization'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -38,29 +40,29 @@ app.register(fastifySwagger, {
     info: {
       title: 'Next.js SaaS',
       description: 'Full-Stack SaaS app with multi-tenant & RBAC',
-      version: '1.0.0'
+      version: '1.0.0',
     },
     components: {
       securitySchemes: {
         bearerAuth: {
           type: 'http',
           scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
-      }
-    }
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
-  transform: jsonSchemaTransform
+  transform: jsonSchemaTransform,
 })
 
 // Adiciona a interface gráfica para visualização da documentação
 // Para acessar a documentação, acesse http://localhost:3333/docs
 app.register(fastifySwaggerUI, {
-  routePrefix: '/docs'
+  routePrefix: '/docs',
 })
 
 app.register(fastifyjwt, {
-  secret: env.JWT_SECRET
+  secret: env.JWT_SECRET,
 })
 
 app.register(fastifyCors)
@@ -75,6 +77,8 @@ app.register(createOrganization)
 app.register(getMembership)
 app.register(getOrganization)
 app.register(getOrganizations)
+app.register(updateOrganization)
+app.register(shutdownOrganization)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log(`Server is running on http://localhost:${env.SERVER_PORT}`)
